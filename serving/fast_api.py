@@ -25,5 +25,5 @@ def health_check() -> str:
 
 @app.post("/predict", response_model=Prediction)
 def predict(payload: Payload) -> Prediction:
-    prediction = predictor.predict(text=payload.text)
+    prediction = predictor.predict_for_online(input_texts=payload.texts)
     return Prediction(probs=prediction.tolist())

@@ -16,4 +16,4 @@ CMD [ "bash" ]
 
 # Fast API docker image
 FROM base AS app-fastapi
-CMD uvicorn --host 0.0.0.0 --port 8080 --workers 4 serving.fast_api:app
+CMD uvicorn --host 0.0.0.0 --port 8080 --workers 1 serving.fast_api:app
