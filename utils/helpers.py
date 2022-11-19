@@ -39,6 +39,9 @@ def load_yaml(filename: str) -> Dict:
         dict_from_yml = yaml.load(file, Loader=yaml.FullLoader)
     return dict_from_yml
 
+def make_world_level_tokens(texts: List[str]):
+    text_lines = [split_text_into_tokens(text) for text in texts]
+    return text_lines
 
 def read_tokenized_lines(filename: str):
     """

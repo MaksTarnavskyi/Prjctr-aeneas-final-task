@@ -2,7 +2,7 @@
 Module for loading, preprocessing and saving data which is needed for model training and testing
 """
 from datasets import load_dataset, load_from_disk, Dataset
-from utils.helpers import read_tokenized_lines, write_lines, init_logger
+from utils.helpers import read_tokenized_lines, write_lines, init_logger, make_world_level_tokens
 import os
 from aeneas.tokenizer import AeneasTokenizer
 from typing import List
@@ -133,3 +133,31 @@ class AeneasDataLoader:
         output = [" ".join(list(map(str, pred_labels))) for pred_labels in extended_predicted_word_labels]
         write_lines(output, output_file)
         logger.info(f"Saved labels in {output_file}")
+
+    @staticmethod
+    def return_predicted_labels(extended_predicted_word_labels: List[List[int]]):
+        output = [" ".join(list(map(str, pred_labels))) for pred_labels in extended_predicted_word_labels]
+        return output
+
+    def load_test_sentences(self, texts: List[str]):
+        logger.info(f"Received {len(texts)} for prediction")
+
+        word_level_tokens = make_world_level_tokens(texts)
+
+        logger.info("Loaded source file for prediction")
+        word_level_token_counts = [len(tokens_in_line) for tokens_in_line in word_level_tokens]
+        default_labels = [[0]*token_count for token_count in word_level_token_counts]
+
+        dataset_dict = {"tokens": word_level_tokens,
+                        "labels": default_labels,
+                        "tokens_count": word_level_token_counts
+                        }
+
+        dataset = Dataset.from_dict(dataset_dict)
+        logger.info("Dataset object created")
+
+        tokenized_dataset = dataset.map(self.aeneas_tokenizer.tokenize_and_align_labels, batched=True)
+        logger.info("Dataset tokenized")
+
+        return tokenized_dataset
+
