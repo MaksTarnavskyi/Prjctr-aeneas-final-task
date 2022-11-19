@@ -21,3 +21,8 @@ train_default:
 predict_file_default:
 	python3 predict.py --transformer_name distilroberta-base --model_dir models/distilroberta-base/distilroberta-base --source_file data/val.src --output_file data/val.pred.lbl.distilroberta-base
 
+build_fast_api:
+	docker build -f Dockerfile -t app-fastapi:latest --target app-fastapi .  
+
+run_fast_api: build_fast_api
+	docker run -it -p 8080:8080 app-fastapi:latest
