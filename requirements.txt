@@ -1,0 +1,5 @@
+tqdm==4.62.2
+transformers[torch]==4.10.2
+datasets==1.11.0
+pyyaml
+numpy==1.21.2
