@@ -4,3 +4,5 @@ datasets==1.11.0
 pyyaml
 numpy==1.21.2
 fastapi==0.87.0
+gunicorn==20.1.0
+uvicorn==0.18.3
